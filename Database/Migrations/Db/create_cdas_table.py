@@ -11,9 +11,6 @@ class Create_cdas_tables(Base):
     data_cadastramento = Column(Date, nullable=False)
     valor_saldo = Column(Numeric(15, 2), nullable=False)
 
-    __table_args__ = (
-        UniqueConstraint('num_cda'),  # ← Aqui é onde garantimos que num_cda seja único
-    )
 
 def run():
     print("Criando tabela 'cdas'...")
