@@ -13,8 +13,8 @@ class RecuperacaoDTO(BaseModel):
         return v
     @field_validator('prob_recuperacao')
     def validate_prob_recuperacao(cls, v):
-        if not (0 <= v <= 1):
-            raise ValueError('prob_recuperacao must be between 0 and 1')
+        if (v < 0):
+            raise ValueError('prob_recuperacao must be a non-negative number')
         return v
     @field_validator('sts_recuperacao')
     def validate_sts_recuperacao(cls, v):

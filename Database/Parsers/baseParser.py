@@ -11,3 +11,4 @@ class BaseParser(ABC):
 
     def read_csv(self):
         return pd.read_csv(self.path)
+

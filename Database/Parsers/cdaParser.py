@@ -15,6 +15,8 @@ class cdaParser(BaseParser):
         for _, row in df.iterrows():
             if isinstance(row['numCDA'], int ) and len(str(row['numCDA'])) > 2:
                 num_cda = str(row['numCDA'])
+            if isinstance(row['numCDA'], float ) and len(str(row['numCDA'])) > 2:
+                num_cda = str(row['numCDA'])[0:-2]
             
             if row['ValSaldo'] < 0 or row['ValSaldo'] is None:
                 continue
