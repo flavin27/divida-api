@@ -2,12 +2,14 @@ from pydantic import BaseModel, field_validator
 from typing import Optional
 from datetime import datetime
 
-class CDADTO(BaseModel):
+class CdaDTO(BaseModel):
     num_cda: str
     ano_inscricao: int
     id_natureza_divida: int
-    cod_fase_cobranca: int
+    cod_situacao_cda: int
+    data_situacao: datetime
     data_cadastramento: datetime
+    cod_fase_cobranca: int
     valor_saldo: float
 
     @field_validator('num_cda')
