@@ -1,6 +1,6 @@
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, ConfigDict, ValidationInfo, field_validator
 from typing import Optional
-from ..Enums import DocumentEnum
+from App.Enums.DocumentEnum import DocumentEnum
 
 class PessoaDTO(BaseModel):
     id: int
@@ -21,10 +21,14 @@ class PessoaDTO(BaseModel):
         return v
 
     @field_validator('tipo_documento', mode='before')
-    def detect_document_type(cls, v, values):
-        doc = values.get('documento')
+    def detect_document_type(cls, v, info: ValidationInfo):
+        doc = info.data.get('documento')
+        if not doc:
+            raise ValueError('Campo "documento" está ausente ou é inválido')
+
         if len(doc) == 11:
             return DocumentEnum.CPF
         if len(doc) == 14:
             return DocumentEnum.CNPJ
-        raise ValueError('documento inválido: deve ter 11 (CPF) ou 14 (CNPJ) dígitos')
+    
+        raise ValueError(f'documento inválido: deve ter 11 (CPF) ou 14 (CNPJ) dígitos: {doc}')

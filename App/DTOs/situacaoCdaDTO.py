@@ -2,7 +2,7 @@ from pydantic import BaseModel, field_validator
 from typing import Optional
 
 
-class SituacaoCDADTO(BaseModel):
+class SituacaoCdaDTO(BaseModel):
     cod_situacao_cda: int
     nome: str
     cod_situacao_fiscal: Optional[int]
