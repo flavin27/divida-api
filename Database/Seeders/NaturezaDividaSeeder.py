@@ -2,7 +2,7 @@ from Database.db import SessionLocal
 from App.Repositories.Db.NaturezaDivida.NaturezaDividaRepository import NaturezaDividaRepository
 from Database.Parsers.naturezaDividaParser import NaturezaDividaParser
 
-class SeedDatabase:
+class NaturezaDividaSeeder:
     def __init__(self, natureza_divida_repo):
         self.natureza_divida_repo = natureza_divida_repo
 
@@ -12,11 +12,11 @@ class SeedDatabase:
         self.natureza_divida_repo.save_all(natureza_divida_list)
 
 def run():
-    print("Seeding the database...\n")
+    print("Seeding natureza divida...\n")
     session = SessionLocal()
     try:
         repo = NaturezaDividaRepository(session)  
-        seedDb = SeedDatabase(repo)
+        seedDb = NaturezaDividaSeeder(repo)
         seedDb.seed_natureza_divida('data/002.csv')
         session.commit()
     except:
@@ -24,7 +24,7 @@ def run():
         raise
     finally:
         session.close()
-    print("Database seeded successfully.\n")
+    print("Database from natureza divida seeded successfully.\n")
 
 if __name__ == "__main__":
     run()
