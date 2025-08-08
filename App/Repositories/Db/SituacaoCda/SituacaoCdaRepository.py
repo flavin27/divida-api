@@ -8,7 +8,7 @@ class SituacaoCdaRepository(ISituacaoCdaRepository):
     def __init__(self, session: Session):
         self.session = session
 
-    def save_all(self, naturezas: List[SituacaoCdaDTO]) -> None:
+    def save_all(self, situacoes: List[SituacaoCdaDTO]) -> None:
         try:
             entities = [
                 SituacaoCda(
@@ -19,7 +19,7 @@ class SituacaoCdaRepository(ISituacaoCdaRepository):
                     cod_exigibilidade=n.cod_exigibilidade,
                     tipo=n.tipo
                 )
-                for n in naturezas
+                for n in situacoes
             ]
             self.session.bulk_save_objects(entities)
             self.session.commit()

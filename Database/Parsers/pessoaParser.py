@@ -9,6 +9,7 @@ class PessoaParser(BaseParser):
 
     def parse(self) -> list:
         df = self.read_csv()
+        df = df.drop_duplicates(subset=["idpessoa"], keep="first")
 
         pessoaList = []
 
