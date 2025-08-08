@@ -7,7 +7,7 @@ class Create_cdas_tables(Base):
     num_cda = Column(String, primary_key=True)
     ano_inscricao = Column(Integer, primary_key=True)
     id_natureza_divida = Column(Integer, ForeignKey('natureza_dividas.id'), nullable=False)
-    cod_situacao_cda = Column(String, nullable=False)
+    cod_situacao_cda = Column(Integer, ForeignKey('situacao_cdas.cod_situacao_cda'), nullable=False)
     data_situacao = Column(Date, nullable=False)
     cod_fase_cobranca = Column(String, nullable=False)
     data_cadastramento = Column(Date, nullable=False)

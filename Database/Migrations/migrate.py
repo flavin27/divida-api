@@ -13,9 +13,9 @@ def migrate():
 
     # Ordem importa por causa das FKs
     run_natureza()
-    run_cda()
-    run_pessoa()
     run_situacao()
+    run_pessoa()
+    run_cda()
     run_cdas_pessoas()
     run_recuperacoes()
 
