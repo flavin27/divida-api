@@ -9,6 +9,7 @@ class NaturezaDividaParser(BaseParser):
 
     def parse(self) -> list:
         df = self.read_csv()
+        df = df.drop_duplicates(subset=["idNaturezadivida"], keep="first")
 
         naturezaDividaList = []
 

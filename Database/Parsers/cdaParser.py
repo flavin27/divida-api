@@ -3,7 +3,7 @@ from App.DTOs.cdaDTO import CdaDTO
 
 from Database.Parsers.baseParser import BaseParser
 
-class cdaParser(BaseParser):
+class CdaParser(BaseParser):
     def __init__(self, path):
         super().__init__(path)
 
@@ -11,6 +11,7 @@ class cdaParser(BaseParser):
         df = self.read_csv()
 
         cdaList = []
+        chaves = set()
 
         for _, row in df.iterrows():
             if isinstance(row['numCDA'], int ) and len(str(row['numCDA'])) > 2:
@@ -20,6 +21,11 @@ class cdaParser(BaseParser):
             
             if row['ValSaldo'] < 0 or row['ValSaldo'] is None:
                 continue
+
+            key = (num_cda, row['anoInscricao'])
+            if key in chaves:
+                continue
+            chaves.add(key)
 
             obj = CdaDTO(
                 num_cda = num_cda,
@@ -36,7 +42,7 @@ class cdaParser(BaseParser):
         return cdaList
 
 def run():
-    parser = cdaParser('data/001.csv')
+    parser = CdaParser('data/001.csv')
     parsed_data = parser.parse()
     for item in parsed_data:
         print(item)
