@@ -1,6 +1,6 @@
 import numbers
 import pandas as pd
-from App.DTOs.cda_pessoaDTO import Cda_pessoaDTO
+from App.DTOs.cda_pessoaDTO import CdaPessoaDTO
 
 from Database.Parsers.baseParser import BaseParser
 
@@ -24,7 +24,7 @@ class CdaPessoaParser(BaseParser):
                 num_cda = str(row['numCDA'])[0:-2]
                 
 
-            obj = Cda_pessoaDTO(
+            obj = CdaPessoaDTO(
                 num_cda = num_cda,
                 idPessoa = row['idPessoa'],
                 sitacao_devedor = row['descsituacaodevedor'],

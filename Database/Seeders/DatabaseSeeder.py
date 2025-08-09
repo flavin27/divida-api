@@ -6,6 +6,7 @@ from Database.Seeders.SituacaoCdaSeeder import run as run_situacao_cda
 from Database.Seeders.CdaSeeder import run as run_cda_seeder
 from Database.Seeders.historicoCdaSeeder import run as run_historico_cda_seeder
 from Database.Seeders.RecuperacaoSeeder import run as run_recuperacao_seeder
+from Database.Seeders.CdaPessoaSeeder import run as run_cda_pessoa_seeder
 
 
 class DatabaseSeeder:
@@ -22,6 +23,8 @@ class DatabaseSeeder:
         run_historico_cda_seeder()
         run_cda_seeder()
         run_recuperacao_seeder()
+        run_cda_pessoa_seeder()
+
 
         print("== Seeding do banco de dados concluído ==")
 

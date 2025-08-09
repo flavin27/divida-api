@@ -1,8 +1,7 @@
-from Database.db import Base, engine
-from sqlalchemy import Column, Integer, String, ForeignKey, Table, PrimaryKeyConstraint, ForeignKeyConstraint
+from sqlalchemy import Column, Integer, String, ForeignKey, ForeignKeyConstraint
+from Database.db import Base
 
-
-class Create_cdas_pessoas_table(Base):
+class CdaPessoa(Base):
     __tablename__ = 'cdas_pessoas'
 
     num_cda = Column(String, primary_key=True)
@@ -18,12 +17,3 @@ class Create_cdas_pessoas_table(Base):
         ),
         ForeignKeyConstraint(['id_pessoa'], ['pessoas.id']),
     )
-
-
-def run():
-    print("Criando tabela cdas_pessoas (pivot)...")
-    Base.metadata.create_all(bind=engine, tables=[Create_cdas_pessoas_table.__table__])
-    print("Tabela criada com sucesso.")
-
-if __name__ == "__main__":
-    run()

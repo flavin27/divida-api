@@ -2,7 +2,7 @@ from pydantic import BaseModel, field_validator
 from typing import Optional
 from datetime import datetime
 
-class Cda_pessoaDTO(BaseModel):
+class CdaPessoaDTO(BaseModel):
     num_cda: str
     idPessoa: int
     sitacao_devedor: int
@@ -19,6 +19,7 @@ class Cda_pessoaDTO(BaseModel):
         return v
     @field_validator('idPessoa')
     def validate_idPessoa(cls, v):
-        if v < 0:
+        if v < 0 or not isinstance(v, int):
             raise ValueError('idPessoa must be a non-negative number')
         return v
+    
