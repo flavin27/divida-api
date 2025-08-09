@@ -1,8 +1,8 @@
 from typing import List
 from sqlalchemy.orm import Session
 from App.DTOs.recuperacaoDTO import RecuperacaoDTO
-from App.Models.Recuperacao import Recuperacao
-from App.Models.Cda import Cda  # importa o model de CDA
+from App.Models.Db.Recuperacao import Recuperacao
+from App.Models.Db.Cda import Cda  # importa o model de CDA
 from App.Repositories.Db.Recuperacao.IRecuperacaoRepository import IRecuperacaoRepository
 
 class RecuperacaoRepository(IRecuperacaoRepository):

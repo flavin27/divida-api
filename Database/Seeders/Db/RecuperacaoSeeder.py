@@ -1,7 +1,7 @@
 from Database.db import SessionLocal
 from App.Repositories.Db.Recuperacao.RecuperacaoRepository import RecuperacaoRepository
 from Database.Parsers.recuperacaoParser import RecuperacaoParser
-from App.Models.Cda import Cda
+from App.Models.Db.Cda import Cda
 
 class RecuperacaoSeeder:
     def __init__(self, recuperacao_repo):

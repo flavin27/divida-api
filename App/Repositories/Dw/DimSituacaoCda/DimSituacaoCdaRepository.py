@@ -1,17 +1,17 @@
 from typing import List
 from sqlalchemy.orm import Session
 from App.DTOs.situacaoCdaDTO import SituacaoCdaDTO
-from App.Models.Db.SituacaoCda import SituacaoCda
-from App.Repositories.Db.SituacaoCda.ISituacaoCdaRepository import ISituacaoCdaRepository
+from App.Models.Dw.DimSituacaoCda import DimSituacaoCda
+from App.Repositories.Dw.DimSituacaoCda.IDimSituacaoCdaRepository import ISituacaoCdaRepository
 
-class SituacaoCdaRepository(ISituacaoCdaRepository):
+class DimSituacaoCdaRepository(ISituacaoCdaRepository):
     def __init__(self, session: Session):
         self.session = session
 
     def save_all(self, situacoes: List[SituacaoCdaDTO]) -> None:
         try:
             entities = [
-                SituacaoCda(
+                DimSituacaoCda(
                     cod_situacao_cda=n.cod_situacao_cda,
                     nome=n.nome,
                     cod_situacao_fiscal=n.cod_situacao_fiscal,
@@ -25,20 +25,4 @@ class SituacaoCdaRepository(ISituacaoCdaRepository):
             self.session.commit()
         except Exception as e:
             self.session.rollback()
-            raise e
-    def get_all(self) -> List[SituacaoCdaDTO]:
-        try:
-            situacoes = self.session.query(SituacaoCda).all()
-            return [
-                SituacaoCdaDTO(
-                    cod_situacao_cda=n.cod_situacao_cda,
-                    nome=n.nome,
-                    cod_situacao_fiscal=n.cod_situacao_fiscal,
-                    cod_fase_cobranca=n.cod_fase_cobranca,
-                    cod_exigibilidade=n.cod_exigibilidade,
-                    tipo=n.tipo
-                )
-                for n in situacoes
-            ]
-        except Exception as e:
             raise e

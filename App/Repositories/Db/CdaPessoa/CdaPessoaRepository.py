@@ -1,9 +1,9 @@
 from typing import List
 from sqlalchemy.orm import Session
 from App.DTOs.cda_pessoaDTO import CdaPessoaDTO
-from App.Models.CdaPessoa import CdaPessoa
-from App.Models.Cda import Cda
-from App.Models.Pessoa import Pessoa
+from App.Models.Db.CdaPessoa import CdaPessoa
+from App.Models.Db.Cda import Cda
+from App.Models.Db.Pessoa import Pessoa
 from App.Repositories.Db.CdaPessoa.ICdaPessoaRepository import ICdaPessoaRepository
 
 class CdaPessoaRepository(ICdaPessoaRepository):

@@ -1,7 +1,7 @@
 from typing import List
 from sqlalchemy.orm import Session
 from App.DTOs.pessoaDTO import PessoaDTO
-from App.Models.Pessoa import Pessoa
+from App.Models.Db.Pessoa import Pessoa
 from App.Repositories.Db.Pessoa.IPessoaRepository import IPessoaRepository
 
 class PessoaRepository(IPessoaRepository):

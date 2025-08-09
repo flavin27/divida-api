@@ -1,9 +1,9 @@
 from typing import List
 from sqlalchemy.orm import Session
 from App.DTOs.cdaDTO import CdaDTO
-from App.Models.HistoricoCda import HistoricoCda
+from App.Models.Db.HistoricoCda import HistoricoCda
 from App.Repositories.Db.HistoricoCda.IHistoricoCdaRepository import IHistoricoCdaRepository
-from App.Models.NaturezaDivida import NaturezaDivida
+from App.Models.Db.NaturezaDivida import NaturezaDivida
 
 class HistoricoCdaRepository(IHistoricoCdaRepository):
     def __init__(self, session: Session):
