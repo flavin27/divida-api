@@ -8,5 +8,7 @@ class ICdaPessoaRepository(ABC):
     def save_all(self, cda_pessoas: List[CdaPessoaDTO]) -> None:
         pass
 
+    
+
 
 

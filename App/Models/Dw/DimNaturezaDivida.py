@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String
-from Database.db import Base
+from Database.dw import Base
 
 class DimNaturezaDivida(Base):
     __tablename__ = "dim_natureza_dividas"

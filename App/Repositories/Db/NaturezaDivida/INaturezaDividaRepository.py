@@ -7,3 +7,7 @@ class INaturezaDividaRepository(ABC):
     @abstractmethod
     def save_all(self, naturezas: List[NaturezaDividaDTO]) -> None:
         pass
+
+    @abstractmethod
+    def get_all(self) -> List[NaturezaDividaDTO]:
+        pass

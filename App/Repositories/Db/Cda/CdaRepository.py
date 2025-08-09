@@ -29,3 +29,11 @@ class CdaRepository(ICdaRepository):
         except Exception as e:
             self.session.rollback()
             raise e
+
+    def get_all(self) -> List[CdaDTO]:
+        try:
+            cda_list = self.session.query(Cda).all()
+            return cda_list
+        except Exception as e:
+            self.session.rollback()
+            raise e

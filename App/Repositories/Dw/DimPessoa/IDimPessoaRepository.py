@@ -2,13 +2,10 @@ from abc import ABC, abstractmethod
 from typing import List
 from App.DTOs.pessoaDTO import PessoaDTO
 
-class IPessoaRepository(ABC):
+class IDimPessoaRepository(ABC):
 
     @abstractmethod
     def save_all(self, pessoas: List[PessoaDTO]) -> None:
-        pass
-    @abstractmethod
-    def get_all(self) -> List[PessoaDTO]:
         pass
 
 

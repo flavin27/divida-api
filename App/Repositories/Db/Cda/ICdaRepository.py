@@ -8,4 +8,8 @@ class ICdaRepository(ABC):
     def save_all(self, cdas: List[CdaDTO]) -> None:
         pass
 
+    @abstractmethod
+    def get_all(self) -> List[CdaDTO]:
+        pass
+
 
