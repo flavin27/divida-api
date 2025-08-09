@@ -4,6 +4,8 @@ from Database.Seeders.NaturezaDividaSeeder import run as run_natureza_divida_see
 from Database.Seeders.PessoaSeeder import run as run_pessoa_seeder
 from Database.Seeders.SituacaoCdaSeeder import run as run_situacao_cda
 from Database.Seeders.CdaSeeder import run as run_cda_seeder
+from Database.Seeders.historicoCdaSeeder import run as run_historico_cda_seeder
+from Database.Seeders.RecuperacaoSeeder import run as run_recuperacao_seeder
 
 
 class DatabaseSeeder:
@@ -17,7 +19,9 @@ class DatabaseSeeder:
         run_natureza_divida_seeder()
         run_situacao_cda()
         run_pessoa_seeder()
+        run_historico_cda_seeder()
         run_cda_seeder()
+        run_recuperacao_seeder()
 
         print("== Seeding do banco de dados concluído ==")
 

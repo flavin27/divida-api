@@ -10,6 +10,9 @@ class RecuperacaoParser(BaseParser):
     def parse(self) -> list:
         df = self.read_csv()
 
+        df = df.drop_duplicates(subset=['numCDA'], keep='last')
+
+
         recuperacaoList = []
 
         

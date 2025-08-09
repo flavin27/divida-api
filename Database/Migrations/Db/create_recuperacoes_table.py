@@ -6,15 +6,16 @@ class Create_recuperacoes_table(Base):
     __tablename__ = "recuperacoes"
 
     num_cda = Column(String, primary_key=True)
-    ano_inscricao = Column(Integer, primary_key=True)
 
     prob_recuperacao = Column(Float, nullable=False)
     sts_recuperacao = Column(String, nullable=False)
 
     __table_args__ = (
         ForeignKeyConstraint(
-            ["num_cda", "ano_inscricao"],
-            ["cdas.num_cda", "cdas.ano_inscricao"]
+            ['num_cda'],
+            ['cdas.num_cda'],
+            name='fk_recuperacoes_num_cda',
+            ondelete='CASCADE',
         ),
     )
 

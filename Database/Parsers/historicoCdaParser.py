@@ -1,30 +1,24 @@
 import pandas as pd
 from App.DTOs.cdaDTO import CdaDTO
+
 from Database.Parsers.baseParser import BaseParser
 
-class CdaParser(BaseParser):
+class HistoricoCdaParser(BaseParser):
     def __init__(self, path):
         super().__init__(path)
 
     def parse(self) -> list:
         df = self.read_csv()
 
-        df['DatSituacao'] = pd.to_datetime(df['DatSituacao'], errors='coerce')
-
-        df = df.sort_values('DatSituacao').drop_duplicates(subset=['numCDA'], keep='last')
-
         cdaList = []
 
         for _, row in df.iterrows():
-
-            if isinstance(row['numCDA'], int) and len(str(row['numCDA'])) > 2:
+            if isinstance(row['numCDA'], int ) and len(str(row['numCDA'])) > 2:
                 num_cda = str(row['numCDA'])
-            elif isinstance(row['numCDA'], float) and len(str(row['numCDA'])) > 2:
-                num_cda = str(row['numCDA'])[:-2]
-            else:
-                continue 
-
-            if pd.isna(row['ValSaldo']) or row['ValSaldo'] < 0:
+            if isinstance(row['numCDA'], float ) and len(str(row['numCDA'])) > 2:
+                num_cda = str(row['numCDA'])[0:-2]
+            
+            if row['ValSaldo'] < 0 or row['ValSaldo'] is None:
                 continue
 
             obj = CdaDTO(
@@ -42,10 +36,13 @@ class CdaParser(BaseParser):
         return cdaList
 
 def run():
-    parser = CdaParser('data/001.csv')
+    parser = HistoricoCdaParser('data/001.csv')
     parsed_data = parser.parse()
     for item in parsed_data:
         print(item)
 
 if __name__ == "__main__":
     run()
+
+
+
