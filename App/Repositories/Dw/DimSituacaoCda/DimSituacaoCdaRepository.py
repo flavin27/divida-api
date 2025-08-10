@@ -26,3 +26,14 @@ class DimSituacaoCdaRepository(ISituacaoCdaRepository):
         except Exception as e:
             self.session.rollback()
             raise e
+
+    def get_id_by_cod_situacao(self, cod_situacao: str) -> int:
+        try:
+            situacao = self.session.query(DimSituacaoCda).filter_by(cod_situacao_cda=cod_situacao).first()
+            if situacao:
+                return situacao.id
+            else:
+                raise ValueError(f"Cod situação {cod_situacao} não encontrado.")
+        except Exception as e:
+            self.session.rollback()
+            raise e

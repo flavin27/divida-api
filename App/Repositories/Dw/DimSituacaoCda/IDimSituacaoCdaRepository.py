@@ -8,3 +8,6 @@ class ISituacaoCdaRepository(ABC):
     def save_all(self, situacoes: List[SituacaoCdaDTO]) -> None:
         pass
 
+    @abstractmethod
+    def get_id_by_cod_situacao(self, cod_situacao: str) -> int:
+        pass

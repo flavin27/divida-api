@@ -27,3 +27,32 @@ class DimDataRepository(IDimDataRepository):
         except Exception as e:
             self.session.rollback()
             raise e
+    
+    def save(self, data: DimDataDTO) -> None:
+        try:
+            entity = DimData(
+                data=data.data,
+                ano=data.ano,
+                mes=data.mes,
+                dia=data.dia,
+                trimestre=data.trimestre,
+                semana=data.semana,
+                dia_semana=data.dia_semana,
+            )
+            self.session.add(entity)
+            self.session.commit()
+
+            return entity.id
+        except Exception as e:
+            self.session.rollback()
+            raise e
+        
+    def get_id_by_data(self, data):
+        try:
+            entity = self.session.query(DimData).filter(DimData.data == data).first()
+            if entity:
+                return entity.id
+            return None
+        except Exception as e:
+            self.session.rollback()
+            raise e
