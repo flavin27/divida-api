@@ -39,3 +39,12 @@ class PessoaRepository(IPessoaRepository):
             ]
         except Exception as e:
             raise e
+
+    def get_all_as_map(self):
+        try:
+            pessoa_list = self.session.query(Pessoa.id, Pessoa.documento).all()
+
+            return {documento: id for id, documento in pessoa_list}
+        except Exception as e:
+            self.session.rollback()
+            raise e

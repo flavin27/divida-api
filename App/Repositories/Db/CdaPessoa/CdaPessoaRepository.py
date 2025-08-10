@@ -41,3 +41,40 @@ class CdaPessoaRepository(ICdaPessoaRepository):
         except Exception as e:
             self.session.rollback()
             raise e
+
+    def get_all(self) -> List[CdaPessoaDTO]:
+        try:
+            cda_pessoa_list = self.session.query(CdaPessoa).all()
+            return [CdaPessoaDTO(
+                num_cda=n.num_cda,
+                idPessoa=n.id_pessoa,
+                sitacao_devedor=n.sitacao_devedor
+            )                 
+            for n in cda_pessoa_list]
+        except Exception as e:
+            self.session.rollback()
+            raise e
+    
+    def get_all_with_document(self) -> List[CdaPessoaDTO]:
+        try:
+            results = (
+                self.session.query(
+                    CdaPessoa.num_cda,
+                    Pessoa.documento,
+                    CdaPessoa.sitacao_devedor
+                )
+                .join(Pessoa, CdaPessoa.id_pessoa == Pessoa.id)
+                .all()
+            )
+
+            return [
+                CdaPessoaDTO(
+                    num_cda=num_cda,
+                    idPessoa=documento,  
+                    sitacao_devedor=sitacao_devedor
+                )
+                for num_cda, documento, sitacao_devedor in results
+            ]
+        except Exception as e:
+            self.session.rollback()
+            raise e

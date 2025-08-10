@@ -24,3 +24,12 @@ class DimPessoaRepository(IDimPessoaRepository):
         except Exception as e:
             self.session.rollback()
             raise e
+
+    def get_all(self):
+        try:
+            pessoa_list = self.session.query(DimPessoa.id, DimPessoa.documento).all()
+
+            return {documento: id for id, documento in pessoa_list}
+        except Exception as e:
+            self.session.rollback()
+            raise e

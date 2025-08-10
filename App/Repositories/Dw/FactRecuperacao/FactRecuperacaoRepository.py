@@ -38,4 +38,3 @@ class FactRecuperacaoRepository(IFactRecuperacaoRepository):
         except Exception as e:
             self.session.rollback()
             raise e
-                # Salva todas as recuperacoes na base de dados
