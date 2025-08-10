@@ -28,3 +28,7 @@ class IFactCdaRepository(ABC):
     @abstractmethod
     def get_inscricoes():
         pass
+
+    @abstractmethod
+    def get_montante():
+        pass

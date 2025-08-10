@@ -210,3 +210,58 @@ class FactCdaRepository(IFactCdaRepository):
         except Exception as e:
             self.session.rollback()
             raise e
+        
+    def get_montante(self):
+        try:
+            percentis = [1, 5, 10, 25, 50, 75, 90, 95, 99]
+            response = []
+
+            totais = dict(
+                self.session.query(
+                    DimNaturezaDivida.nome,
+                    func.coalesce(func.sum(FactCda.valor_saldo), 0)
+                )
+                .join(FactCda.natureza)
+                .group_by(DimNaturezaDivida.nome)
+                .all()
+            )
+
+            for p in percentis:
+                subquery = (
+                    self.session.query(
+                        FactCda.natureza_id.label('natureza_id'),
+                        func.percentile_cont(p / 100.0).within_group(FactCda.valor_saldo).label('valor_percentil')
+                    )
+                    .group_by(FactCda.natureza_id)
+                    .subquery()
+                )
+
+                query = (
+                    self.session.query(
+                        DimNaturezaDivida.nome.label('natureza'),
+                        func.coalesce(func.sum(FactCda.valor_saldo), 0).label('acumulado')
+                    )
+                    .join(DimNaturezaDivida, FactCda.natureza_id == DimNaturezaDivida.id)
+                    .join(subquery, FactCda.natureza_id == subquery.c.natureza_id)
+                    .filter(FactCda.valor_saldo <= subquery.c.valor_percentil)
+                    .group_by(DimNaturezaDivida.nome)
+                )
+
+                resultados = query.all()
+
+                registro = {'Percentual': p}
+                for natureza in totais.keys():
+                    registro[natureza] = 0.0
+
+                for natureza, acumulado in resultados:
+                    total_geral = totais.get(natureza, 1) or 1  
+                    percentual = (float(acumulado) / float(total_geral)) * 100
+                    registro[natureza] = percentual
+
+                response.append(registro)
+
+            return response
+
+        except Exception as e:
+            self.session.rollback()
+            raise e
