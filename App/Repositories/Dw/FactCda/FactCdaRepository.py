@@ -299,3 +299,41 @@ class FactCdaRepository(IFactCdaRepository):
         results = query.all()
 
         return [{"name": grupo, "Quantidade": qtd} for grupo, qtd in results]
+    
+    def get_saldo(self):
+        categoria_case = case(
+            (
+                DimNaturezaDivida.nome.op('~*')('multa'), 'Multas'
+            ),
+            (
+                DimNaturezaDivida.nome.op('~*')('IPTU'), 'IPTU'
+            ),
+            (
+                DimNaturezaDivida.nome.op('~*')('ISS'), 'ISS'
+            ),
+            (
+                DimNaturezaDivida.nome.op('~*')('Taxa'), 'Taxas'
+            ),
+            (
+                DimNaturezaDivida.nome.op('~*')('ITBI'), 'ITBI'
+            ),
+            else_='Outros'
+        ).label("grupo")
+
+        results = (
+            self.session.query(
+                categoria_case,
+                func.sum(FactCda.valor_saldo).label("Saldo")
+            )
+            .join(FactCda.natureza)
+            .group_by(categoria_case)
+            .all()
+        )
+
+        return [
+            {
+                "name": grupo,
+                "Saldo": float(saldo) if saldo is not None else 0.0
+            }
+            for grupo, saldo in results
+        ]

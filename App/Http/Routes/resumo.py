@@ -25,3 +25,7 @@ async def get_montante():
 @router.get("/quantidade_cdas")
 async def get_natureza():
     return CdaController.index_natureza()
+
+@router.get("/saldo_cdas")
+async def get_saldo():
+    return CdaController.index_saldo()

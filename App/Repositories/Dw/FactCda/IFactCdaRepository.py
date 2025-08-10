@@ -36,3 +36,7 @@ class IFactCdaRepository(ABC):
     @abstractmethod
     def get_natureza():
         pass
+
+    @abstractmethod
+    def get_saldo():
+        pass
