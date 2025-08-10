@@ -32,3 +32,7 @@ class IFactCdaRepository(ABC):
     @abstractmethod
     def get_montante():
         pass
+
+    @abstractmethod
+    def get_natureza():
+        pass

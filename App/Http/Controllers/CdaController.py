@@ -33,3 +33,9 @@ class CdaController:
         fact_cda_repository = FactCdaRepository(session)
         data = fact_cda_repository.get_montante()
         return {"status": "ok", "data": data}
+
+    def index_natureza():
+        session = SessionLocal()
+        fact_cda_repository = FactCdaRepository(session)
+        data = fact_cda_repository.get_natureza()
+        return {"status": "ok", "data": data}

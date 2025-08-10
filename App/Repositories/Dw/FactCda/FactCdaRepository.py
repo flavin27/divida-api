@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import List
-from sqlalchemy import desc, asc, func
+from sqlalchemy import case, desc, asc, func
 from sqlalchemy.orm import Session, joinedload
 from App.DTOs.Dw.dim_dataDTO import DimDataDTO
 from App.DTOs.cdaDTO import CdaDTO
@@ -265,3 +265,37 @@ class FactCdaRepository(IFactCdaRepository):
         except Exception as e:
             self.session.rollback()
             raise e
+        
+    def get_natureza(self):
+        categoria_case = case(
+            (
+                DimNaturezaDivida.nome.op('~*')('multa'), 'Multas'
+            ),
+            (
+                DimNaturezaDivida.nome.op('~*')('IPTU'), 'IPTU'
+            ),
+            (
+                DimNaturezaDivida.nome.op('~*')('ISS'), 'ISS'
+            ),
+            (
+                DimNaturezaDivida.nome.op('~*')('Taxa'), 'Taxas'
+            ),
+            (
+                DimNaturezaDivida.nome.op('~*')('ITBI'), 'ITBI'
+            ),
+            else_='Outros'
+        ).label("grupo")
+
+        query = (
+            self.session.query(
+                categoria_case,
+                func.count(FactCda.id).label("Quantidade")
+            )
+            .join(FactCda.natureza)
+            .group_by(categoria_case)
+            .order_by(func.count(FactCda.id).desc())
+        )
+
+        results = query.all()
+
+        return [{"name": grupo, "Quantidade": qtd} for grupo, qtd in results]

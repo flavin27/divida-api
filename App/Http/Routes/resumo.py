@@ -21,3 +21,7 @@ async def get_inscricoes():
 @router.get("/montante_acumulado")
 async def get_montante():
     return CdaController.index_montante()
+
+@router.get("/quantidade_cdas")
+async def get_natureza():
+    return CdaController.index_natureza()
