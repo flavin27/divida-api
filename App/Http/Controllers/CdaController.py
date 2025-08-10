@@ -12,3 +12,10 @@ class CdaController:
         fact_cda_repository = FactCdaRepository(session)
         data = fact_cda_repository.index(request)
         return {"status": "ok", "data": data}
+
+    @staticmethod
+    def index_distribuicao_cda():
+        session = SessionLocal()
+        fact_cda_repository = FactCdaRepository(session)
+        data = fact_cda_repository.get_distribuicao_cdas()
+        return {"status": "ok", "data": data}

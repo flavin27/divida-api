@@ -20,3 +20,7 @@ class IFactCdaRepository(ABC):
     @abstractmethod
     def index(self, request: CdaRequest) -> List[object]:
         pass
+
+    @abstractmethod
+    def get_distribuicao_cdas():
+        pass

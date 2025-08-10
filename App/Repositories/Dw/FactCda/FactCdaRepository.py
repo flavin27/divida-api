@@ -1,9 +1,11 @@
 from datetime import datetime
 from typing import List
-from sqlalchemy import desc, asc
+from sqlalchemy import desc, asc, func
 from sqlalchemy.orm import Session, joinedload
 from App.DTOs.Dw.dim_dataDTO import DimDataDTO
 from App.DTOs.cdaDTO import CdaDTO
+from App.Models.Dw.DimNaturezaDivida import DimNaturezaDivida
+from App.Models.Dw.DimSituacaoCda import DimSituacaoCda
 from App.Models.Dw.FactCda import FactCda
 from App.Repositories.Dw.FactCda.IFactCdaRepository import IFactCdaRepository
 from App.Repositories.Dw.DimData.DimDataRepository import DimDataRepository
@@ -158,3 +160,34 @@ class FactCdaRepository(IFactCdaRepository):
             })
 
         return response
+    
+    def get_distribuicao_cdas(self):
+        results = (
+            self.session.query(
+                DimNaturezaDivida.nome.label("natureza"),
+                DimSituacaoCda.nome.label("situacao"),
+                func.sum(FactCda.valor_saldo).label("total_saldo")
+            )
+            .join(FactCda.natureza)
+            .join(FactCda.situacao)
+            .group_by(DimNaturezaDivida.nome, DimSituacaoCda.nome)
+            .all()
+        )
+
+        temp = {}
+        for natureza, situacao, total in results:
+            if natureza not in temp:
+                temp[natureza] = {}
+            temp[natureza][situacao] = float(total)
+
+        lista_formatada = []
+        for natureza, situacoes in temp.items():
+            total_geral = sum(situacoes.values()) or 1  
+            lista_formatada.append({
+                "name": natureza,
+                "Em cobranca": round((situacoes.get("Em cobranca", 0.0) / total_geral) * 100, 2),
+                "Cancelada": round((situacoes.get("Cancelada", 0.0) / total_geral) * 100, 2),
+                "Quitada": round((situacoes.get("Quitada", 0.0) / total_geral) * 100, 2)
+            })
+
+        return lista_formatada
