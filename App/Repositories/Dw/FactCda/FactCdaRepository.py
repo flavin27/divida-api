@@ -11,6 +11,7 @@ from App.Repositories.Dw.FactCda.IFactCdaRepository import IFactCdaRepository
 from App.Repositories.Dw.DimData.DimDataRepository import DimDataRepository
 from App.Repositories.Dw.DimSituacaoCda.DimSituacaoCdaRepository import DimSituacaoCdaRepository
 from App.Http.Requests.CdaResquest import CdaRequest
+from App.Models.Dw.DimData import DimData
 
 class FactCdaRepository(IFactCdaRepository):
     def __init__(self, session: Session):
@@ -191,3 +192,21 @@ class FactCdaRepository(IFactCdaRepository):
             })
 
         return lista_formatada
+    
+    def get_inscricoes(self):
+        try:
+            results = (
+                self.session.query(
+                    DimData.ano.label("ano"),
+                    func.count(FactCda.id).label("Quantidade")
+                )
+                .join(FactCda.ano_inscricao)
+                .group_by(DimData.ano)
+                .order_by(DimData.ano)
+                .all()
+            )
+            return [{"ano": ano, "Quantidade": quantidade} for ano, quantidade in results]
+
+        except Exception as e:
+            self.session.rollback()
+            raise e

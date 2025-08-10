@@ -13,3 +13,7 @@ router = APIRouter(
 @router.get("/distribuicao_cdas")
 async def get_distribuicao():
     return CdaController.index_distribuicao_cda()
+
+@router.get("/inscricoes")
+async def get_inscricoes():
+    return CdaController.index_inscricoes()

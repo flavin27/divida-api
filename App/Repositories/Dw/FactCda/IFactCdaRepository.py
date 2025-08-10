@@ -24,3 +24,7 @@ class IFactCdaRepository(ABC):
     @abstractmethod
     def get_distribuicao_cdas():
         pass
+
+    @abstractmethod
+    def get_inscricoes():
+        pass

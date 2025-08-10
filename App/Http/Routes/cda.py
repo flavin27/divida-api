@@ -17,3 +17,4 @@ async def get_cdas(request: Annotated[CdaRequest, Depends()]):
 @router.get("/detalhes_devedor")
 async def get_devedor():
     return PessoaController.index()
+
