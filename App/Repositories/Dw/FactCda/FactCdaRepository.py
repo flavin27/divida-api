@@ -185,9 +185,9 @@ class FactCdaRepository(IFactCdaRepository):
             total_geral = sum(situacoes.values()) or 1  
             lista_formatada.append({
                 "name": natureza,
-                "Em cobranca": round((situacoes.get("Em cobranca", 0.0) / total_geral) * 100, 2),
+                "Em cobranca": round(((situacoes.get("Cobrança", 0.0) + situacoes.get("Cobrança Garantida", 0.0) )/ total_geral) * 100, 2),
                 "Cancelada": round((situacoes.get("Cancelada", 0.0) / total_geral) * 100, 2),
-                "Quitada": round((situacoes.get("Quitada", 0.0) / total_geral) * 100, 2)
+                "Quitada": round(((situacoes.get("Paga", 0.0) +situacoes.get("Paga por Guia Especial", 0.0)  + situacoes.get("Paga por Conversão", 0.0)) / total_geral) * 100, 2)
             })
 
         return lista_formatada
