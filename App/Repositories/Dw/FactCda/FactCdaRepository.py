@@ -81,3 +81,24 @@ class FactCdaRepository(IFactCdaRepository):
             semana=data.isocalendar()[1],
             dia_semana=data.weekday()
         )
+    
+
+    def get_all(self):
+        try:
+            fact_cda_list = self.session.query(FactCda.id, FactCda.num_cda).all()
+
+            return {num_cda: id for id, num_cda in fact_cda_list}
+        except Exception as e:
+            self.session.rollback()
+            raise e
+
+
+    def get_id_by_cda(self, cda):
+        try:
+            entity = self.session.query(FactCda).filter(FactCda.num_cda == cda).first()
+            if entity:
+                return entity.id
+            return None
+        except Exception as e:
+            self.session.rollback()
+            raise e

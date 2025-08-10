@@ -5,7 +5,7 @@ class Create_fact_recuperacoes_table(Base):
 
     __tablename__ = 'fact_recuperacoes'
 
-    recuperacao_key = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     num_cda = Column(String, nullable=False)
     prob_recuperacao = Column(Float, nullable=False)
     sts_recuperacao = Column(String, nullable=False)

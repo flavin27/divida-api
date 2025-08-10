@@ -36,3 +36,11 @@ class RecuperacaoRepository(IRecuperacaoRepository):
         except Exception as e:
             self.session.rollback()
             raise e
+
+    def get_all(self) -> List[RecuperacaoDTO]:
+        try:
+            recuperacao_list = self.session.query(Recuperacao).all()
+            return recuperacao_list
+        except Exception as e:
+            self.session.rollback()
+            raise e

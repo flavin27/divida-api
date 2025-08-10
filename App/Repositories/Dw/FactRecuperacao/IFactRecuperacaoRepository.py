@@ -2,12 +2,9 @@ from abc import ABC, abstractmethod
 from typing import List
 from App.DTOs.recuperacaoDTO import RecuperacaoDTO
 
-class IRecuperacaoRepository(ABC):
-
+class IFactRecuperacaoRepository(ABC):
     @abstractmethod
     def save_all(self, recuperacoes: List[RecuperacaoDTO]) -> None:
         pass
 
-    @abstractmethod
-    def get_all(self) -> List[RecuperacaoDTO]:
-        pass
+
