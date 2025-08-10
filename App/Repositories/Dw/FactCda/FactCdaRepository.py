@@ -1,12 +1,14 @@
 from datetime import datetime
 from typing import List
-from sqlalchemy.orm import Session
+from sqlalchemy import desc, asc
+from sqlalchemy.orm import Session, joinedload
 from App.DTOs.Dw.dim_dataDTO import DimDataDTO
 from App.DTOs.cdaDTO import CdaDTO
 from App.Models.Dw.FactCda import FactCda
 from App.Repositories.Dw.FactCda.IFactCdaRepository import IFactCdaRepository
 from App.Repositories.Dw.DimData.DimDataRepository import DimDataRepository
 from App.Repositories.Dw.DimSituacaoCda.DimSituacaoCdaRepository import DimSituacaoCdaRepository
+from App.Http.Requests.CdaResquest import CdaRequest
 
 class FactCdaRepository(IFactCdaRepository):
     def __init__(self, session: Session):
@@ -102,3 +104,57 @@ class FactCdaRepository(IFactCdaRepository):
         except Exception as e:
             self.session.rollback()
             raise e
+        
+
+    def index(self, request: CdaRequest):
+        query = (
+            self.session.query(FactCda)
+            .join(FactCda.natureza)
+            .join(FactCda.situacao)
+            .join(FactCda.ano_inscricao)
+            .outerjoin(FactCda.recuperacao)
+            .options(joinedload(FactCda.recuperacao))  # Carregar relacionamento para evitar lazy load
+        )
+
+        if request.numCDA:
+            query = query.filter(FactCda.num_cda == request.numCDA)
+        if request.minSaldo is not None:
+            query = query.filter(FactCda.valor_saldo >= request.minSaldo)
+        if request.maxSaldo is not None:
+            query = query.filter(FactCda.valor_saldo <= request.maxSaldo)
+        if request.minAno is not None:
+            query = query.filter(FactCda.ano_inscricao.ano >= request.minAno)  
+        if request.maxAno is not None:
+            query = query.filter(FactCda.ano_inscricao.ano <= request.maxAno)
+        if request.natureza:
+            query = query.filter(FactCda.natureza.nome == request.natureza)  
+        if request.agrupamento_situacao is not None:
+            query = query.filter(FactCda.situacao.id == request.agrupamento_situacao)
+
+        if request.sort_by in ("ano", "valor"):
+            if request.sort_by == "ano":
+                sort_col = FactCda.ano_inscricao.ano
+            else:
+                sort_col = FactCda.valor_saldo
+            if request.sort_order == "desc":
+                query = query.order_by(desc(sort_col))
+            else:
+                query = query.order_by(asc(sort_col))
+
+        results = query.all()
+
+        ano_atual = datetime.now().year
+
+        response = []
+        for item in results:
+            anos_idade = ano_atual - getattr(item.ano_inscricao, 'ano', ano_atual)
+            response.append({
+                "numCDA": item.num_cda,
+                "valor_saldo_atualizado": float(item.valor_saldo),
+                "qtde_anos_idade_cda": anos_idade,
+                "agrupamento_situacao": item.situacao_id,
+                "natureza": getattr(item.natureza, "nome", ""),
+                "score": item.recuperacao.prob_recuperacao if item.recuperacao else None,
+            })
+
+        return response

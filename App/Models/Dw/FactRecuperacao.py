@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, Float, ForeignKeyConstraint, For
 from Database.dw import Base
 from sqlalchemy.types import Enum as SqlEnum 
 from App.Models.Dw.FactCda import FactCda
+from sqlalchemy.orm import relationship
 
 class FactRecuperacao(Base):
     __tablename__ = 'fact_recuperacoes'
@@ -11,6 +12,8 @@ class FactRecuperacao(Base):
     prob_recuperacao = Column(Float, nullable=False)
     sts_recuperacao = Column(String, nullable=False)
     cda_id = Column(Integer, ForeignKey('fact_cdas.id'), nullable=False)
+
+    cda = relationship("FactCda", back_populates="recuperacao")
 
 
     __table_args__ = (

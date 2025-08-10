@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Dict, List
 from App.DTOs.cdaDTO import CdaDTO
+from App.Http.Requests.CdaResquest import CdaRequest
 
 class IFactCdaRepository(ABC):
 
@@ -14,4 +15,8 @@ class IFactCdaRepository(ABC):
 
     @abstractmethod
     def get_id_by_cda(self, cda: CdaDTO) -> int:
+        pass
+
+    @abstractmethod
+    def index(self, request: CdaRequest) -> List[object]:
         pass
