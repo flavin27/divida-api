@@ -33,3 +33,21 @@ class DimPessoaRepository(IDimPessoaRepository):
         except Exception as e:
             self.session.rollback()
             raise e
+    
+    def index(self) -> List[PessoaDTO]:
+        try:
+            pessoas = self.session.query(DimPessoa).all()
+            lista_dtos = []
+            for p in pessoas:
+                dto = PessoaDTO(
+                    id=p.id,
+                    nome=p.nome,
+                    documento = p.documento,
+                    tipo_documento = p.tipo_documento
+                    
+                )
+                lista_dtos.append(dto)
+            return lista_dtos
+        except Exception as e:
+            self.session.rollback()
+            raise e

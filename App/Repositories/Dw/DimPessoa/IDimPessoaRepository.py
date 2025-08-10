@@ -12,4 +12,8 @@ class IDimPessoaRepository(ABC):
     def get_all(self) -> Dict[int, int]:
         pass
 
+    @abstractmethod
+    def index(self) -> List[PessoaDTO]:
+        pass
+
 
