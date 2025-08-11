@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  db_prod:
+    image: postgres:15
+    container_name: db_prod
+    environment:
+      POSTGRES_DB: divida_db_prod
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_prod_data:/var/lib/postgresql/data
+
+  db_dw:
+    image: postgres:15
+    container_name: db_dw
+    environment:
+      POSTGRES_DB: divida_dw_prod
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"  # Mapeia para outra porta na máquina, ex: 5433
+    volumes:
+      - db_dw_data:/var/lib/postgresql/data
+
+  api:
+    build: .
+    container_name: divida_api
+    depends_on:
+      - db_prod
+      - db_dw
+    environment:
+      DB_HOST: db_prod
+      DB_PORT: 5432
+      DB_NAME: divida_db_prod
+      DB_USER: postgres
+      DB_PASS: postgres
+
+      DW_HOST: db_dw
+      DW_PORT: 5432
+      DW_NAME: divida_dw_prod
+      DW_USER: postgres
+      DW_PASS: postgres
+
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    command: ["uvicorn", "App.Core.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+volumes:
+  db_prod_data:
+  db_dw_data:
