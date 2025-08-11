@@ -4,6 +4,7 @@ from Database.Seeders.Dw.DimPessoaSeeder import run as run_dim_pessoa
 from Database.Seeders.Dw.DimSituacaoCdaSeeder import run as run_dim_situacao_cda
 from Database.Seeders.Dw.FactCdaSeeder import run as run_fact_cda
 from Database.Seeders.Dw.FactRecuperacaoSeeder import run as run_fact_recuperacao
+from Database.Seeders.Dw.FactCdaPessoaSeeder import run as run_fact_cda_pessoa
 
 class DatawarehouseSeeder:
 
@@ -17,6 +18,8 @@ class DatawarehouseSeeder:
         run_dim_data()
         run_fact_cda()
         run_fact_recuperacao()
+        run_fact_cda_pessoa()
+
 
         print("Datawarehouse Seeder completed successfully.")
 

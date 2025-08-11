@@ -43,7 +43,11 @@ $ cd projeto-lamdec
 3 - Compile a imagem do docker
 
 ```bash
-docker compose up --build -d
+docker-compose build
+docker-compose run --rm migrate
+docker-compose run --rm seed
+docker-compose run --rm test
+docker-compose up api
 ```
 
 4 - Acesse a documentação

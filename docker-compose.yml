@@ -21,7 +21,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
-      - "5433:5432"  # Mapeia para outra porta na máquina, ex: 5433
+      - "5433:5432"
     volumes:
       - db_dw_data:/var/lib/postgresql/data
 
@@ -49,6 +49,72 @@ services:
     volumes:
       - .:/app
     command: ["uvicorn", "App.Core.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  migrate:
+    build: .
+    depends_on:
+      - db_prod
+      - db_dw
+    environment:
+      DB_HOST: db_prod
+      DB_PORT: 5432
+      DB_NAME: divida_db_prod
+      DB_USER: postgres
+      DB_PASS: postgres
+
+      DW_HOST: db_dw
+      DW_PORT: 5432
+      DW_NAME: divida_dw_prod
+      DW_USER: postgres
+      DW_PASS: postgres
+
+    volumes:
+      - .:/app
+    command: ["python","-m", "Database/Migrations/migrate"]  
+
+  seed:
+    build: .
+    depends_on:
+      - db_prod
+      - db_dw
+    environment:
+      DB_HOST: db_prod
+      DB_PORT: 5432
+      DB_NAME: divida_db_prod
+      DB_USER: postgres
+      DB_PASS: postgres
+
+      DW_HOST: db_dw
+      DW_PORT: 5432
+      DW_NAME: divida_dw_prod
+      DW_USER: postgres
+      DW_PASS: postgres
+
+    volumes:
+      - .:/app
+    command: ["python","-m", "Database/Seeders/run_seeders"] 
+
+  test:
+    build: .
+    depends_on:
+      - db_prod
+      - db_dw
+    environment:
+      DB_HOST: db_prod
+      DB_PORT: 5432
+      DB_NAME: divida_db_prod
+      DB_USER: postgres
+      DB_PASS: postgres
+
+      DW_HOST: db_dw
+      DW_PORT: 5432
+      DW_NAME: divida_dw_prod
+      DW_USER: postgres
+      DW_PASS: postgres
+
+    volumes:
+      - .:/app
+    command: ["sh", "-c", "PYTHONPATH=. python3 -m pytest"]
 
 volumes:
   db_prod_data:
